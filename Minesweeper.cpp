@@ -1,6 +1,21 @@
+/** 
+ * @author Team FourFour8
+ * @file Minesweeper.cpp
+ * @date September 2018
+ * @brief Minesweeper implementation file
+**/
+
+
+
 #include "Minesweeper.h"
 #include <string>
+#include <exception>
 using namespace std;
+
+
+
+
+/*-------------------------------------------------------------------------------------------------Constructor-----------------------------------------------------------------------------------*/
 Minesweeper:: Minesweeper(int Row, int Col, int NumOfMines)
 {
   m_row = Row;
@@ -28,8 +43,12 @@ Minesweeper:: Minesweeper(int Row, int Col, int NumOfMines)
       Bboard[i][j]="■";
     }
   }
-  setMines(NumOfMines);
+  setMines();
 }
+//end constructor
+
+
+/*-------------------------------------------------------------------------------------------------Destructor-----------------------------------------------------------------------------------*/
 Minesweeper:: ~Minesweeper()
 {
   for (int i = 0; i < m_row; i++)
@@ -44,15 +63,21 @@ Minesweeper:: ~Minesweeper()
   }
   delete[] Bboard;
 }
-void Minesweeper::setMines(int mines)
+//end Destructor
+
+
+
+/*-------------------------------------------------------------------------------------------------setMines-----------------------------------------------------------------------------------*/
+void Minesweeper::setMines()
 {
 
   int count=0; //use to set the number of mines
-  while(count < mines)
+  srand (time(NULL));
+  while(count < m_mines)
   {
-    int tempRow = rand() % (m_row-1);
-    int tempCol = rand() % (m_col-1);
-    cout<<tempRow<<tempCol<<endl;
+    int tempRow = rand() % (m_row);
+    int tempCol = rand() % (m_col);
+    //cout<<tempRow<<tempCol<<"\n";
     //set the mine is the block is blank, otherwise keep looping
     if(Bboard[tempRow][tempCol] == "■")
     {
@@ -61,26 +86,37 @@ void Minesweeper::setMines(int mines)
     }
   }
 }
-bool Minesweeper::Marking(int Row, int Col, int option)
+//end setMines
+
+
+/*-------------------------------------------------------------------------------------------------Marking-----------------------------------------------------------------------------------*/
+bool Minesweeper::Marking(int Row, int Col, int option) throw(std::runtime_error)
 {
   if(option==1)
   {
-    Uboard[Row][Col] = "F";
-    if(Bboard[Row][Col]=="M")
+    if(Uboard[Row][Col]!="■")
     {
-      NumOfFlag++;
-      if(NumOfFlag==m_mines)
+      throw(std::runtime_error("Cannot flag on non-blank block.\n"));
+    }
+    else
+    {  
+      Uboard[Row][Col] = "F";
+      if(Bboard[Row][Col]=="M")
       {
-      return(true);//Condition1:set all the flags on the correct mines. 
+        NumOfFlag++;
+        if(NumOfFlag==m_mines)
+        {
+        return(true);//Condition1:set all the flags on the correct mines. 
+        }
+        else
+        {
+          return(false);// Condetion2:set one flag on the correct position.
+        }
       }
       else
       {
-      return(false);// Condetion2:set one flag on the correct position.
+        return(false);//Condition3:set one flag on the wrong position.
       }
-    }
-    else
-    {
-      return(false);//Condition3:set one flag on the wrong position.
     }
   }
   else//unflag function
@@ -92,7 +128,13 @@ bool Minesweeper::Marking(int Row, int Col, int option)
     }
     return(false);
   }
+  
 }
+//end Marking
+
+
+
+/*-------------------------------------------------------------------------------------------------Revealing-----------------------------------------------------------------------------------*/
 bool Minesweeper::Revealing(int Row, int Col)
 {
   if(Bboard[Row][Col]=="M")
@@ -105,62 +147,65 @@ bool Minesweeper::Revealing(int Row, int Col)
     return(true);
   }  
 }
+//end Revealing
 
 
+
+/*-------------------------------------------------------------------------------------------------Check-----------------------------------------------------------------------------------*/
 int Minesweeper::Check(int Row, int Col)
 {
 
   int count=0;
-      if(Row<m_row && Col+1 < m_col && Row>0 && Col+1>0)
+      if(Row<m_row && Col+1 < m_col && Row>=0 && Col+1>=0)
       {
         if(Bboard[Row][Col+1]=="M")
         {
           count++;
         }
       }
-     if(Row<m_row && Col-1 < m_col && Row>0 && Col-1>0)
+     if(Row<m_row && Col-1 < m_col && Row>=0 && Col-1>=0)
      {
       if(Bboard[Row][Col-1]=="M")
       {
         count++;
       }
      }
-     if(Row+1<m_row && Col< m_col && Row+1>0 && Col>0)
+     if(Row+1<m_row && Col< m_col && Row+1>=0 && Col>=0)
      {
       if(Bboard[Row+1][Col]=="M")
       {
         count++;
       }
      }
-     if(Row-1<m_row && Col<m_col && Row-1>0 && Col>0)
+     if(Row-1<m_row && Col<m_col && Row-1>=0 && Col>=0)
      {
       if(Bboard[Row-1][Col]=="M")
       {
         count++;
       }
      }
-     if(Row+1<m_row && Col+1 < m_col&& Row+1>0 && Col+1>0)
+     if(Row+1<m_row && Col+1 < m_col && Row+1>=0 && Col+1>=0)
      {
         if(Bboard[Row+1][Col+1]=="M")
       {
         count++;
       }
      }
-     if(Row+1<m_row && Col-1 < m_col && Row+1>0 && Col-1>0)
+     if(Row+1<m_row && Col-1 < m_col && Row+1>=0 && Col-1>=0)
      {
         if(Bboard[Row+1][Col-1]=="M")
       {
         count++;
       }
      }
-     if(Row-1<m_row && Col+1 < m_col&& Row-1>0 && Col+1>0)
+     if(Row-1<m_row && Col+1 < m_col&& Row-1>=0 && Col+1>=0)
      {
       if(Bboard[Row-1][Col+1]=="M")
       {
         count++;
       }
      }
-     if(Row-1<m_row && Col-1 <m_col&& Row-1>0 && Col-1>0)
+     if(Row-1<m_row && Col-1 <m_col&& Row-1>=0 && Col-1>=0)
      {
       if(Bboard[Row-1][Col-1]=="M")
       {
@@ -169,14 +214,17 @@ int Minesweeper::Check(int Row, int Col)
   }
   return(count);
 }
+//end Check
 
 
+
+/*-------------------------------------------------------------------------------------------------RecCheck-----------------------------------------------------------------------------------*/
 void Minesweeper::RecCheck(int Row, int Col)
 {
-  if(Check(Row,Col)==0 && Uboard[Row][Col]=="■")
+  if(Check(Row,Col)==0 && Uboard[Row][Col]=="■")//Condition 1: There are no mines adjacent to the input position and this spot is in defalt status.
   {
     Uboard[Row][Col]="□";
-    if(Row-1<m_row && Col-1 < m_col && Row-1>=0 && Col-1>=0)
+    if(Row-1<m_row && Col-1 < m_col && Row-1>=0 && Col-1>=0)//Begin to check the 8 directions of the input position
     {
       Uboard[Row][Col]="□";
       RecCheck(Row-1,Col-1);
@@ -225,36 +273,85 @@ void Minesweeper::RecCheck(int Row, int Col)
      
     }
   }
-  else
+  else//Condition 2: There are mines adjacent to the input position.
   {
-    if(Check(Row,Col)==0)
+    if(Check(Row,Col)==0)//This was set to prevent the situation the 0 will show on the board.
     {
       Uboard[Row][Col]="□";
     }
     else
     {
-      Uboard[Row][Col]=to_string(Check(Row,Col));
+      Uboard[Row][Col]=to_string(Check(Row,Col));//set the spot to the number of the mines those are adjacent to it.
     }
   }
 }
+//end RecCheck
 
 
-void Minesweeper::print()
+/*-------------------------------------------------------------------------------------------------print-----------------------------------------------------------------------------------*/
+void Minesweeper::print(int option)
 {
-	cout<<" ";
-	for(int k=0;k<m_row; k++)
+	cout<<"------------------------------------------\n";
+	cout<<"    ";//print the space part on the left corner.
+	for(int k=0;k<m_col; k++)
 	{
-		cout<<k;
+		if(k<9)
+    		{
+      			cout<<k<<"   ";
+    		}
+    		else if(k==9) 
+    		{
+     			cout<<k<<"   ";
+    		}
+    		else
+    		{
+      			cout<<k<<"  ";
+    		}
 	}
+	
+
 	cout<<endl;
+	
+
 	for(int i=0; i<m_row; i++)
 	{
-		cout<<i;
-	
+    		if(i<10)
+    		{
+     			 cout<<i<<"   ";
+    		}
+    		else 
+    		{
+      			cout<<i<<"  ";
+    		}
 		for(int j=0; j<m_col; j++)
 		{
-			cout<<Uboard[i][j];
+      			if(option==2&&Bboard[i][j]=="M")//Print mines when user lose the game.
+			{
+        			cout<<"M"<<"   ";
+      			}
+     			else
+			{
+				cout<<Uboard[i][j]<<"   ";
+			}   
 		}
 		cout<<"\n";
 	}
+	cout<<"------------------------------------------\n";
+
 }
+//end print
+/*-------------------------------------------------------------------------------------------------Reset----------------------------------------------------------------------------------*/
+
+void Minesweeper::Reset()
+{
+  for(int i=0;i<m_row;i++)
+  {
+    for(int j=0;j<m_col;j++)
+    {
+      Uboard[i][j]="■";
+      Bboard[i][j]="■";
+    }
+  }
+  setMines();
+}
+//end Reset
