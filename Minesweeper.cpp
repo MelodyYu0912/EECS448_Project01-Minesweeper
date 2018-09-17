@@ -1,7 +1,21 @@
+/** 
+ * @author Team FourFour8
+ * @file Minesweeper.cpp
+ * @date September 2018
+ * @brief Minesweeper implementation file
+**/
+
+
+
 #include "Minesweeper.h"
 #include <string>
 #include <exception>
 using namespace std;
+
+
+
+
+/*-------------------------------------------------------------------------------------------------Constructor-----------------------------------------------------------------------------------*/
 Minesweeper:: Minesweeper(int Row, int Col, int NumOfMines)
 {
   m_row = Row;
@@ -31,6 +45,10 @@ Minesweeper:: Minesweeper(int Row, int Col, int NumOfMines)
   }
   setMines();
 }
+//end constructor
+
+
+/*-------------------------------------------------------------------------------------------------Destructor-----------------------------------------------------------------------------------*/
 Minesweeper:: ~Minesweeper()
 {
   for (int i = 0; i < m_row; i++)
@@ -45,9 +63,18 @@ Minesweeper:: ~Minesweeper()
   }
   delete[] Bboard;
 }
+
+//end Destructor
+
+
+
+/*-------------------------------------------------------------------------------------------------setMines-----------------------------------------------------------------------------------*/
+
 void Minesweeper::setMines()
 {
   int count=0; //use to set the number of mines
+
+  srand (time(NULL));
   while(count < m_mines)
   {
     int tempRow = rand() % (m_row);
@@ -61,6 +88,8 @@ void Minesweeper::setMines()
     }
   }
 }
+//end set
+/*-------------------------------------------------------------------------------------------------Marking-----------------------------------------------------------------------------------*/
 bool Minesweeper::Marking(int Row, int Col) throw (runtime_error)
 {
     if(Uboard[Row][Col]!="■")
@@ -88,7 +117,11 @@ bool Minesweeper::Marking(int Row, int Col) throw (runtime_error)
       }
     }
 } 
-  
+//end Marking 
+
+
+
+/*-------------------------------------------------------------------------------------------------unMarking-----------------------------------------------------------------------------------*/
 void Minesweeper::unMarking(int Row,int Col) throw(runtime_error)
 {
   if((Uboard[Row][Col]!="F"))
@@ -104,6 +137,11 @@ void Minesweeper::unMarking(int Row,int Col) throw(runtime_error)
     Uboard[Row][Col]="■";
   }
 }
+//end unMarking
+
+
+
+/*-------------------------------------------------------------------------------------------------Revealing-----------------------------------------------------------------------------------*/
 bool Minesweeper::Revealing(int Row, int Col) throw(runtime_error)
 {
   if(Uboard[Row][Col]!="■")
@@ -123,8 +161,11 @@ bool Minesweeper::Revealing(int Row, int Col) throw(runtime_error)
     }  
   }
 }
+//end Revealing
 
 
+
+/*-------------------------------------------------------------------------------------------------Check-----------------------------------------------------------------------------------*/
 int Minesweeper::Check(int Row, int Col)
 {
 
@@ -187,8 +228,11 @@ int Minesweeper::Check(int Row, int Col)
   }
   return(count);
 }
+//end Check
 
 
+
+/*-------------------------------------------------------------------------------------------------RecCheck-----------------------------------------------------------------------------------*/
 void Minesweeper::RecCheck(int Row, int Col)
 {
   if(Check(Row,Col)==0 && Uboard[Row][Col]=="■")//Condition 1: There are no mines adjacent to the input position and this spot is in defalt status.
@@ -255,53 +299,67 @@ void Minesweeper::RecCheck(int Row, int Col)
     }
   }
 }
+//end RecCheck
 
 
+
+/*-------------------------------------------------------------------------------------------------print-----------------------------------------------------------------------------------*/
 void Minesweeper::print(int option)
 {
-  cout<<"------------------------------------------\n";
+	cout<<"------------------------------------------\n";
 	cout<<"    ";//print the space part on the left corner.
 	for(int k=0;k<m_col; k++)
 	{
 		if(k<9)
-    {
-      cout<<k<<"   ";
-    }
-    else if(k==9) 
-    {
-      cout<<k<<"   ";
-    }
-    else
-    {
-      cout<<k<<"  ";
-    }
+    		{
+      			cout<<k<<"   ";
+    		}
+    		else if(k==9) 
+    		{
+     			cout<<k<<"   ";
+    		}
+    		else
+    		{
+      			cout<<k<<"  ";
+    		}
+
 	}
+	
+
 	cout<<endl;
+	
+
 	for(int i=0; i<m_row; i++)
 	{
-    if(i<10)
-    {
-      cout<<i<<"   ";
-    }
-    else 
-    {
-      cout<<i<<"  ";
-    }
+
+    		if(i<10)
+    		{
+     			 cout<<i<<"   ";
+    		}
+    		else 
+    		{
+      			cout<<i<<"  ";
+    		}
 		for(int j=0; j<m_col; j++)
 		{
-      if(option==2&&Bboard[i][j]=="M")//Print mines when user lose the game.
+      			if(option==2&&Bboard[i][j]=="M")//Print mines when user lose the game.
 			{
-        cout<<"M"<<"   ";
-      }
-      else
-      {
-        cout<<Uboard[i][j]<<"   ";
-      }   
+        			cout<<"M"<<"   ";
+      			}
+     			else
+			{
+				cout<<Uboard[i][j]<<"   ";
+			}   
 		}
 		cout<<"\n";
 	}
-  cout<<"------------------------------------------\n";
+	cout<<"------------------------------------------\n";
+
+
 }
+//end print
+/*-------------------------------------------------------------------------------------------------Reset----------------------------------------------------------------------------------*/
+
 void Minesweeper::Reset()
 {
   for(int i=0;i<m_row;i++)
@@ -314,4 +372,4 @@ void Minesweeper::Reset()
   }
   setMines();
 }
-
+//end Reset
