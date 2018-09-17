@@ -112,6 +112,8 @@ public:
   Minesweeper(int Row, int Col, int NumOfMines);
 
 
+
+
 /**
  * @pre  Null.
  * @post destroys board and clears memory
@@ -124,34 +126,43 @@ public:
  * @post Print the Uboard
  * @param Null.
 
+
 **/
   void print(int option);
 
-/**
- * @brief Revealing checks if the selected spot is a mine and returns false if true, otherwise it calls RecCheck and returns true.
- * @pre  A valid input position.
- * @post Reveal the input position. If the position is a mine, the game is over. Otherwise, run the rec_check method.
- * @param row target position's row (int).
- * @param col target position's column (int).
-**/
-  bool Revealing(int Row, int Col);
+   /**
+   * @brief unMarking is the function that deals with revealing
+   * @pre  A valid input position.
+   * @post spot and potentially the spots around it are revealed. Game ends if spot is a mine
+   * @param row the target position's Row (int)
+   * @param col the target position's column (int)
+   **/
+  bool Revealing(int Row, int Col) throw(runtime_error);
 
-/**
- * @brief Marking is the flagging/unflagging function.  
- * @pre  A valid input position.
- * @post Put the flag on the input position.
- * @param row target position's row (int).
- * @param col target position's column (int).
- * @param option determines if user has correctly flagged a mine or not (int)
-**/
-  bool Marking(int Row, int Col,int option) throw(runtime_error);
-
+    /**
+   * @brief Marking is the function that deals with flagging
+   * @pre  A valid input position.
+   * @post spot is flagged
+   * @param row the target position's Row (int)
+   * @param col the target position's column (int)
+   **/
+  bool Marking(int Row, int Col) throw(runtime_error);
+  
+  /**
+   * @brief unMarking is the function that deals with unflagging
+   * @pre  A valid input position.
+   * @post spot is unflagged
+   * @param row the target position's Row (int)
+   * @param col the target position's column (int)
+   **/
+  void unMarking(int Row, int Col) throw(runtime_error);
 /** 
  * @brief Reset creates a new board with the same dimensions but randomizes the placement of the mines.
  * @pre  Null.
  * @post Reset the Uboard and Bboard and the game start over.
  * @param Null.
 **/
+
   void Reset();
   
 };

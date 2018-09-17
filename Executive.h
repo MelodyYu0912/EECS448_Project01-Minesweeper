@@ -17,7 +17,6 @@ class Executive
 {
 	public:
 
-
 /**
  * @brief Executive default constructor
  * @pre  none
@@ -43,10 +42,9 @@ class Executive
  * @post game over
 **/
 void run();
-	
-
 
 	private:
+
 
 
 
@@ -70,6 +68,11 @@ int m_col;
 **/
 int m_mines;
 
+/**
+ * an integer
+ * privately stores the number of flags
+**/
+int m_flag;
 
 };
 #endif
